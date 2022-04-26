@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="be4d682c-3c9e-426b-be73-56b45f64101e" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="26O1y9SesORTh4IXI1xIsRzdlJV" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/JadeAll/JADE-all-4.5.0/JADE-bin-4.5.0/jade/lib/jade.jar!/" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RunManager" selected="Application.jade">
+    <configuration name="Boot" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="jade.Boot" />
+      <module name="JadeSetup" />
+      <option name="PROGRAM_PARAMETERS" value="-container" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="jade" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="jade.Boot" />
+      <module name="JadeSetup" />
+      <option name="PROGRAM_PARAMETERS" value="-gui" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.jade" />
+      <item itemvalue="Application.Boot" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="be4d682c-3c9e-426b-be73-56b45f64101e" name="Default Changelist" comment="" />
+      <created>1647280070435</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1647280070435</updated>
+      <workItem from="1647280075712" duration="483000" />
+      <workItem from="1647342657718" duration="4581000" />
+      <workItem from="1650981722141" duration="3250000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="96" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1647343778194">
+      <screen x="0" y="0" width="1280" height="672" />
+    </state>
+    <state x="96" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.672@0.0.1280.672" timestamp="1647343778194" />
+    <state x="348" y="81" key="FileChooserDialogImpl" timestamp="1647280143059">
+      <screen x="0" y="0" width="1280" height="672" />
+    </state>
+    <state x="348" y="81" key="FileChooserDialogImpl/0.0.1280.672@0.0.1280.672" timestamp="1647280143059" />
+    <state width="1237" height="146" key="GridCell.Tab.0.bottom" timestamp="1650985187176">
+      <screen x="0" y="0" width="1280" height="672" />
+    </state>
+    <state width="1237" height="146" key="GridCell.Tab.0.bottom/0.0.1280.672@0.0.1280.672" timestamp="1650985187176" />
+    <state width="1237" height="146" key="GridCell.Tab.0.center" timestamp="1650985187176">
+      <screen x="0" y="0" width="1280" height="672" />
+    </state>
+    <state width="1237" height="146" key="GridCell.Tab.0.center/0.0.1280.672@0.0.1280.672" timestamp="1650985187176" />
+    <state width="1237" height="146" key="GridCell.Tab.0.left" timestamp="1650985187176">
+      <screen x="0" y="0" width="1280" height="672" />
+    </state>
+    <state width="1237" height="146" key="GridCell.Tab.0.left/0.0.1280.672@0.0.1280.672" timestamp="1650985187176" />
+    <state width="1237" height="146" key="GridCell.Tab.0.right" timestamp="1650985187176">
+      <screen x="0" y="0" width="1280" height="672" />
+    </state>
+    <state width="1237" height="146" key="GridCell.Tab.0.right/0.0.1280.672@0.0.1280.672" timestamp="1650985187176" />
+    <state x="121" y="0" key="SettingsEditor" timestamp="1647280167494">
+      <screen x="0" y="0" width="1280" height="672" />
+    </state>
+    <state x="121" y="0" key="SettingsEditor/0.0.1280.672@0.0.1280.672" timestamp="1647280167494" />
+    <state x="349" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1650981723886">
+      <screen x="0" y="0" width="1280" height="672" />
+    </state>
+    <state x="349" y="165" key="com.intellij.ide.util.TipDialog/0.0.1280.672@0.0.1280.672" timestamp="1650981723886" />
+  </component>
+</project>
