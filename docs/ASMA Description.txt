@@ -1,0 +1,21 @@
+>>>> Air Traffic Control <<<<
+
+Air traffic control is a tough job and our project intends to ease all of this
+process. Each airplane has its own remaining fuel, a 
+minimum time and space required to land, and the airport has different
+priorities based on the company of the airplane, potential emergencies
+and the number of passengers. 
+The number of runways are scarce and the aim is to make the best use of them. 
+We intend to develop a MAS-based to solve this problem of allocating
+airstrips to aircrafts. This allocation should be dynamic, 
+through negotiation between agents.
+
+Dependent Variables:
+	- Waiting Times
+	- Airstrip Allocation / Occupation
+	- Fuel Used
+Independent Variables:
+	- Starting Fuel
+	- Minimum time to land each aircraft
+	- Minimum space to land each aircraft
+	- Number of Airstrips
