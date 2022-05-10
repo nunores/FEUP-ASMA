@@ -16,13 +16,17 @@ import java.util.Date;
 
 public class ControlTowerAgent extends Agent {
 
-    private int runwayLength; // In meters
+    private int runwayLength; // In meters TODO: retirar
     private LaunchAgents launchAgents = LaunchAgents.getInstance();
+
+    private Runway runway;
 
     @Override
     protected void setup() {
         Object[] args = this.getArguments();
         runwayLength = (int) args[0];
+
+        runway = new Runway(runwayLength);
 
         ACLMessage message = new ACLMessage(ACLMessage.CFP);
         ArrayList<AgentController> airplaneAgents = this.launchAgents.getAirplaneAgents();
