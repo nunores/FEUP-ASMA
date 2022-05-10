@@ -23,11 +23,11 @@ public class AirplaneBehaviour extends ContractNetResponder {
         this.agent = (AirplaneAgent) a;
     }
 
-    private ACLMessage createProposal(ACLMessage cfp) {
+    private ACLMessage createProposal(ACLMessage cfp) throws Exception {
         ACLMessage propose = cfp.createReply();
         propose.setPerformative(ACLMessage.PROPOSE);
 
-        AirplaneProposal proposalArgs = new AirplaneProposal(agent.getTimeToLand(), agent.getSpaceRequiredToLand(), agent.getTimeLeftOfFuel(), agent.getTimeWaiting());
+        AirplaneProposal proposalArgs = new AirplaneProposal(agent.getTimeToLand(), agent.getSpaceRequiredToLand(), calculateTimeLeftOfFuel(agent.getFuel(), agent.getFuelPerSecond()), calculateUrgency(agent.getTimeWaiting(), agent.getFlightType()), agent.isSos());
 
         try {
             propose.setContentObject(proposalArgs);
@@ -37,6 +37,29 @@ public class AirplaneBehaviour extends ContractNetResponder {
 
         return propose;
     }
+
+    private int calculateUrgency(int timeWaiting, AirplaneAgent.FlightType flightType) throws Exception {
+        int importanceDegree;
+        switch (flightType) {
+            case lowCost:
+                importanceDegree = 1;
+                break;
+            case vip:
+                importanceDegree = 5;
+                break;
+            case businessClass:
+                importanceDegree = 2;
+                break;
+            case _private:
+                importanceDegree = 3;
+                break;
+            default:
+                throw new Exception("No information about the flight type.");
+        }
+        return importanceDegree*timeWaiting;
+    }
+
+    private int calculateTimeLeftOfFuel(int fuel, float fuelPerSecond) { return (int) (fuel / fuelPerSecond); }
 
     @Override
     protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException {
@@ -50,9 +73,13 @@ public class AirplaneBehaviour extends ContractNetResponder {
 
         if (agent.getSpaceRequiredToLand() > proposal.getRunwayLength()) {
             throw new RefuseException("Plane too big for the runway");
-        }
-        else {
-            return createProposal(cfp);
+        } else {
+            try {
+                return createProposal(cfp);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 }

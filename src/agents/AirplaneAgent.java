@@ -7,12 +7,15 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 public class AirplaneAgent extends Agent {
+    public enum FlightType { lowCost, vip, businessClass, _private }
 
     private int timeToLand; // In seconds
     private int spaceRequiredToLand; // In meters
-    private int timeLeftOfFuel; // In seconds
+    private int fuel; // In liters
     private int timeWaiting; // In seconds
-
+    private float fuelPerSecond; // In seconds
+    private FlightType flightType;
+    private boolean sos;
 
     @Override
     public void setup()
@@ -20,8 +23,11 @@ public class AirplaneAgent extends Agent {
         Object[] args = this.getArguments();
         timeToLand = (int) args[0];
         spaceRequiredToLand = (int) args[1];
-        timeLeftOfFuel = (int) args[2];
+        fuel = (int) args[2];
         timeWaiting = (int) args[3];
+        fuelPerSecond = (float) args[4];
+        flightType = (FlightType) args[5];
+        sos = (boolean) args[6];
 
         MessageTemplate message = MessageTemplate.and(
                 MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
@@ -32,20 +38,18 @@ public class AirplaneAgent extends Agent {
 
     }
 
-    public int getTimeToLand() {
-        return timeToLand;
-    }
+    public float getFuelPerSecond() { return fuelPerSecond; }
 
-    public int getSpaceRequiredToLand() {
-        return spaceRequiredToLand;
-    }
+    public FlightType getFlightType() { return flightType; }
 
-    public int getTimeLeftOfFuel() {
-        return timeLeftOfFuel;
-    }
+    public boolean isSos() { return sos; }
 
-    public int getTimeWaiting() {
-        return timeWaiting;
-    }
+    public int getTimeToLand() { return timeToLand; }
+
+    public int getSpaceRequiredToLand() { return spaceRequiredToLand; }
+
+    public int getFuel() { return fuel; }
+
+    public int getTimeWaiting() { return timeWaiting; }
 }
 

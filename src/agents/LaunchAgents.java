@@ -1,14 +1,11 @@
 package agents;
 
-import jade.core.Profile;
-import jade.core.ProfileImpl;
-import jade.core.Runtime;
 import jade.wrapper.AgentController;
-import jade.wrapper.ContainerController;
-import jade.wrapper.StaleProxyException;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import static agents.AirplaneAgent.FlightType.lowCost;
 
 public class LaunchAgents {
 
@@ -17,14 +14,10 @@ public class LaunchAgents {
 
     private static LaunchAgents instance = null;
 
-    public LaunchAgents() {
+    private LaunchAgents() {
         this.n_airplanes = 3;
     }
-
-    public LaunchAgents(int n_airplanes) {
-        this.n_airplanes = n_airplanes;
-    }
-
+    
     public static LaunchAgents getInstance()
     {
         if (instance == null)
@@ -33,13 +26,17 @@ public class LaunchAgents {
         return instance;
     }
 
+
     public Object[] createAirplaneArguments(){
 		List<Object> args = new ArrayList<Object>();
 
-        args.add(10);
-        args.add(100);
-        args.add(50);
-        args.add(0);
+        args.add(10); // timeToLand
+        args.add(2); // spaceRequiredToLand
+        args.add(50); // timeLeftOfFuel
+        args.add(0); // timeWaiting
+        args.add(0.3); // fuelPerSecond
+        args.add(lowCost); // flightType
+        args.add(false); // sos
 
         return args.toArray();
     }
