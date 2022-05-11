@@ -9,8 +9,8 @@ import static agents.AirplaneAgent.FlightType.lowCost;
 
 public class LaunchAgents {
 
-    private int n_airplanes; // DEFAULT: 3
-    private ArrayList<AgentController> airplaneAgents = new ArrayList<AgentController>();
+    private final int n_airplanes; // DEFAULT: 3
+    private final ArrayList<AgentController> airplaneAgents = new ArrayList<>();
 
     private static LaunchAgents instance = null;
 
@@ -28,7 +28,7 @@ public class LaunchAgents {
 
 
     public Object[] createAirplaneArguments(){
-		List<Object> args = new ArrayList<Object>();
+		List<Object> args = new ArrayList<>();
 
         args.add(10); // timeToLand
         args.add(6); // spaceRequiredToLand
@@ -42,7 +42,7 @@ public class LaunchAgents {
     }
 
     public Object[] createControlTowerArguments() {
-        List<Object> args = new ArrayList<Object>();
+        List<Object> args = new ArrayList<>();
 
         args.add(10); // runWayLength
 

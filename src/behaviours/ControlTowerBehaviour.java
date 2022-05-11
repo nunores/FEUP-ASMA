@@ -12,7 +12,7 @@ import java.util.Vector;
 
 public class ControlTowerBehaviour extends ContractNetInitiator {
 
-    private ControlTowerAgent controlTowerAgent;
+    private final ControlTowerAgent controlTowerAgent;
 
     public ControlTowerBehaviour(Agent a, ACLMessage cfp) {
         super(a, cfp);
@@ -24,8 +24,8 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
         System.out.println("HandleAllResponses");
         int bestValue = -1;
         AirplaneProposal bestProposal = null;
-        for (int i = 0; i < responses.size(); i++) {
-            ACLMessage message = (ACLMessage) responses.get(i);
+        for (Object response: responses) {
+            ACLMessage message = (ACLMessage) response;
             if (message.getPerformative() == ACLMessage.PROPOSE) {
                 AirplaneProposal proposal = null;
                 try {
@@ -33,6 +33,7 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
                 } catch (UnreadableException e) {
                     e.printStackTrace();
                 }
+                assert proposal != null;
                 int value = calculateValue(proposal);
                 if (value > bestValue) {
                     bestValue = value;
@@ -40,15 +41,16 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
                     ACLMessage reply = message.createReply();
                     reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                     acceptances.addElement(reply);
-                }
-                else {
+                } else {
                     ACLMessage reply = message.createReply();
                     reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
                     acceptances.addElement(reply);
                 }
             }
         }
-        while (!controlTowerAgent.enoughSpace(bestProposal.getSpaceRequiredToLand())) {
+        while (true) {
+            assert bestProposal != null;
+            if (controlTowerAgent.enoughSpace(bestProposal.getSpaceRequiredToLand())) break;
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {

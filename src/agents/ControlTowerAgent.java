@@ -2,32 +2,29 @@ package agents;
 
 import behaviours.ControlTowerBehaviour;
 import jade.core.AID;
-import jade.domain.FIPANames;
-import jade.wrapper.StaleProxyException;
 import jade.core.Agent;
+import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
+import jade.wrapper.StaleProxyException;
 import proposals.ControlTowerProposal;
 import utils.Runway;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class ControlTowerAgent extends Agent {
 
-    private static int runwayLength; // In meters TODO: retirar
-    private LaunchAgents launchAgents = LaunchAgents.getInstance();
+    private final LaunchAgents launchAgents = LaunchAgents.getInstance();
 
-    private Runway runway;
+    private static Runway runway;
 
     @Override
     protected void setup() {
         Object[] args = this.getArguments();
-        runwayLength = (int) args[0];
 
-        runway = new Runway(runwayLength);
+        runway = new Runway((int) args[0]);
 
         ACLMessage message = new ACLMessage(ACLMessage.CFP);
         ArrayList<AgentController> airplaneAgents = this.launchAgents.getAirplaneAgents();
@@ -41,9 +38,9 @@ public class ControlTowerAgent extends Agent {
         }
 
         message.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
-        message.setReplyByDate((new Date(System.currentTimeMillis() + 5000))); // 5 seconds reply limit
+        message.setReplyByDate((new Date(System.currentTimeMillis() + 10000))); // 10 seconds reply limit
 
-        ControlTowerProposal proposal = new ControlTowerProposal(runwayLength);
+        ControlTowerProposal proposal = new ControlTowerProposal(runway.getLength());
 
         try {
             message.setContentObject(proposal);
@@ -55,17 +52,14 @@ public class ControlTowerAgent extends Agent {
     }
 
     public boolean enoughSpace(int spaceRequiredToLand) {
-        if (runwayLength >= spaceRequiredToLand) {
-            return true;
-        }
-        return false;
+        return runway.getLength() >= spaceRequiredToLand;
     }
 
     public static void landPlane(int spaceRequired) {
-        runwayLength = runwayLength - spaceRequired;
+        runway.setLength(runway.getLength() - spaceRequired);
     }
 
     public static void parkPlane(int spaceRequired) {
-        runwayLength = runwayLength + spaceRequired;
+        runway.setLength(runway.getLength() + spaceRequired);
     }
 }

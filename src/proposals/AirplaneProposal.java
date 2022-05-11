@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 public class AirplaneProposal implements Serializable{
 
-    private int timeToLand; // In seconds
-    private int spaceRequiredToLand; // In meters
-    private int timeLeftOfFuel; // In seconds
-    private int urgency;
-    private boolean sos;
+    private final int timeToLand; // In seconds
+    private final int spaceRequiredToLand; // In meters
+    private final int timeLeftOfFuel; // In seconds
+    private final int urgency;
+    private final boolean sos;
 
 
     public int getTimeToLand() {

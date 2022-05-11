@@ -1,24 +1,21 @@
 package behaviours;
 
+import agents.AirplaneAgent;
 import agents.ControlTowerAgent;
 import jade.core.Agent;
-import jade.domain.FIPAAgentManagement.FailureException;
-import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetResponder;
-import agents.AirplaneAgent;
 import proposals.AirplaneProposal;
 import proposals.ControlTowerProposal;
 
-import javax.naming.ldap.Control;
 import java.io.IOException;
 
 public class AirplaneBehaviour extends ContractNetResponder {
 
-    private AirplaneAgent agent;
+    private final AirplaneAgent agent;
 
     public AirplaneBehaviour(Agent a, MessageTemplate mt) {
         super(a, mt);
@@ -29,7 +26,8 @@ public class AirplaneBehaviour extends ContractNetResponder {
         ACLMessage propose = cfp.createReply();
         propose.setPerformative(ACLMessage.PROPOSE);
 
-        AirplaneProposal proposalArgs = new AirplaneProposal(agent.getTimeToLand(), agent.getSpaceRequiredToLand(), calculateTimeLeftOfFuel(agent.getFuel(), agent.getFuelPerSecond()), calculateUrgency(agent.getTimeWaiting(), agent.getFlightType()), agent.isSos());
+        AirplaneProposal proposalArgs = new AirplaneProposal(agent.getTimeToLand(), agent.getSpaceRequiredToLand(),
+                calculateTimeLeftOfFuel(agent.getFuel(), agent.getFuelPerSecond()), calculateUrgency(agent.getTimeWaiting(), agent.getFlightType()), agent.isSos());
 
         try {
             propose.setContentObject(proposalArgs);
@@ -73,6 +71,7 @@ public class AirplaneBehaviour extends ContractNetResponder {
             e.printStackTrace();
         }
 
+        assert proposal != null;
         if (agent.getSpaceRequiredToLand() > proposal.getRunwayLength()) {
             throw new RefuseException("Plane too big for the runway");
         } else {
@@ -86,7 +85,7 @@ public class AirplaneBehaviour extends ContractNetResponder {
     }
 
     @Override
-    protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
+    protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) {
         System.out.println("Landed " + agent.getSpaceRequiredToLand());
         ControlTowerAgent.landPlane(agent.getSpaceRequiredToLand());
         new java.util.Timer().schedule(
@@ -97,7 +96,7 @@ public class AirplaneBehaviour extends ContractNetResponder {
                         ControlTowerAgent.parkPlane(agent.getSpaceRequiredToLand());
                     }
                 },
-                agent.getTimeToLand() * 1000
+                agent.getTimeToLand() * 1000L
         );
 
         ACLMessage inform = accept.createReply();

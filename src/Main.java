@@ -7,7 +7,6 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 import java.util.List;
-import java.util.ArrayList;
 
 
 public class Main {
@@ -24,7 +23,7 @@ public class Main {
 
         AgentController airplaneAgentController;
 
-        List<AgentController> airplaneAgents = new ArrayList<AgentController>();
+        List<AgentController> airplaneAgents;
 
         airplaneAgents = launchAgents.getAirplaneAgents();
 

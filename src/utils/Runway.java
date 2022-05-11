@@ -6,11 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Runway {
-    private List<AID> airplanesOccupying;
     private int length; // In meters
 
     public Runway(int length){
-        this.airplanesOccupying = new ArrayList<AID>();
+        List<AID> airplanesOccupying = new ArrayList<>();
         this.length = length;
     }
 
@@ -18,5 +17,8 @@ public class Runway {
         return length;
     }
 
+    public void setLength(int length){
+        this.length = length;
+    }
 
 }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class ControlTowerProposal implements Serializable {
 
-    private int runwayLength;
+    private final int runwayLength;
 
     public ControlTowerProposal(int runwayLength) {
         this.runwayLength = runwayLength;
