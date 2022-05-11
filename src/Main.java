@@ -45,6 +45,7 @@ public class Main {
         }
 
         containerController.createNewAgent("ControlTowerAgent", "agents.ControlTowerAgent", launchAgents.createControlTowerArguments()).start();
+
     }
 
 }

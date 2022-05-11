@@ -13,9 +13,11 @@ public class AirplaneAgent extends Agent {
     private int spaceRequiredToLand; // In meters
     private int fuel; // In liters
     private int timeWaiting; // In seconds
-    private float fuelPerSecond; // In seconds
+    private double fuelPerSecond; // In seconds
     private FlightType flightType;
     private boolean sos;
+
+    private ControlTowerAgent controlTower;
 
     @Override
     public void setup()
@@ -25,7 +27,7 @@ public class AirplaneAgent extends Agent {
         spaceRequiredToLand = (int) args[1];
         fuel = (int) args[2];
         timeWaiting = (int) args[3];
-        fuelPerSecond = (float) args[4];
+        fuelPerSecond = (double) args[4];
         flightType = (FlightType) args[5];
         sos = (boolean) args[6];
 
@@ -38,7 +40,7 @@ public class AirplaneAgent extends Agent {
 
     }
 
-    public float getFuelPerSecond() { return fuelPerSecond; }
+    public double getFuelPerSecond() { return fuelPerSecond; }
 
     public FlightType getFlightType() { return flightType; }
 

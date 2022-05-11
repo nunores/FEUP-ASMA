@@ -8,6 +8,7 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import proposals.ControlTowerProposal;
+import utils.Runway;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -16,7 +17,7 @@ import java.util.Date;
 
 public class ControlTowerAgent extends Agent {
 
-    private int runwayLength; // In meters TODO: retirar
+    private static int runwayLength; // In meters TODO: retirar
     private LaunchAgents launchAgents = LaunchAgents.getInstance();
 
     private Runway runway;
@@ -51,5 +52,20 @@ public class ControlTowerAgent extends Agent {
         }
 
         addBehaviour(new ControlTowerBehaviour(this, message));
+    }
+
+    public boolean enoughSpace(int spaceRequiredToLand) {
+        if (runwayLength >= spaceRequiredToLand) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void landPlane(int spaceRequired) {
+        runwayLength = runwayLength - spaceRequired;
+    }
+
+    public static void parkPlane(int spaceRequired) {
+        runwayLength = runwayLength + spaceRequired;
     }
 }

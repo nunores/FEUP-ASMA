@@ -21,6 +21,9 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
 
     @Override
     protected void handleAllResponses(Vector responses, Vector acceptances) {
+        System.out.println("HandleAllResponses");
+        int bestValue = -1;
+        AirplaneProposal bestProposal = null;
         for (int i = 0; i < responses.size(); i++) {
             ACLMessage message = (ACLMessage) responses.get(i);
             if (message.getPerformative() == ACLMessage.PROPOSE) {
@@ -31,11 +34,33 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
                     e.printStackTrace();
                 }
                 int value = calculateValue(proposal);
+                if (value > bestValue) {
+                    bestValue = value;
+                    bestProposal = proposal;
+                    ACLMessage reply = message.createReply();
+                    reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+                    acceptances.addElement(reply);
+                }
+                else {
+                    ACLMessage reply = message.createReply();
+                    reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+                    acceptances.addElement(reply);
+                }
+            }
+        }
+        while (!controlTowerAgent.enoughSpace(bestProposal.getSpaceRequiredToLand())) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
 
     private int calculateValue(AirplaneProposal proposal) {
-        return 0;
+        if (proposal.isSos()) {
+            return 2147483647;
+        }
+        return proposal.getUrgency();
     }
 }

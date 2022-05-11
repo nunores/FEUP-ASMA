@@ -31,7 +31,7 @@ public class LaunchAgents {
 		List<Object> args = new ArrayList<Object>();
 
         args.add(10); // timeToLand
-        args.add(2); // spaceRequiredToLand
+        args.add(6); // spaceRequiredToLand
         args.add(50); // timeLeftOfFuel
         args.add(0); // timeWaiting
         args.add(0.3); // fuelPerSecond
@@ -44,7 +44,7 @@ public class LaunchAgents {
     public Object[] createControlTowerArguments() {
         List<Object> args = new ArrayList<Object>();
 
-        args.add(10);
+        args.add(10); // runWayLength
 
         return args.toArray();
     }

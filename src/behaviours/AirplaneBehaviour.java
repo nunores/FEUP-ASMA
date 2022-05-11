@@ -1,5 +1,6 @@
 package behaviours;
 
+import agents.ControlTowerAgent;
 import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
@@ -12,6 +13,7 @@ import agents.AirplaneAgent;
 import proposals.AirplaneProposal;
 import proposals.ControlTowerProposal;
 
+import javax.naming.ldap.Control;
 import java.io.IOException;
 
 public class AirplaneBehaviour extends ContractNetResponder {
@@ -59,11 +61,11 @@ public class AirplaneBehaviour extends ContractNetResponder {
         return importanceDegree*timeWaiting;
     }
 
-    private int calculateTimeLeftOfFuel(int fuel, float fuelPerSecond) { return (int) (fuel / fuelPerSecond); }
+    private int calculateTimeLeftOfFuel(int fuel, double fuelPerSecond) { return (int) (fuel / fuelPerSecond); }
 
     @Override
     protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException {
-
+        System.out.println("HandleCFPAirplane");
         ControlTowerProposal proposal = null;
         try {
             proposal = (ControlTowerProposal) cfp.getContentObject();
@@ -81,5 +83,25 @@ public class AirplaneBehaviour extends ContractNetResponder {
                 return null;
             }
         }
+    }
+
+    @Override
+    protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
+        System.out.println("Landed " + agent.getSpaceRequiredToLand());
+        ControlTowerAgent.landPlane(agent.getSpaceRequiredToLand());
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        System.out.println("Parking " + agent.getSpaceRequiredToLand());
+                        ControlTowerAgent.parkPlane(agent.getSpaceRequiredToLand());
+                    }
+                },
+                agent.getTimeToLand() * 1000
+        );
+
+        ACLMessage inform = accept.createReply();
+        inform.setPerformative(ACLMessage.INFORM);
+        return inform;
     }
 }
