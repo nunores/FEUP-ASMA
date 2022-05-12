@@ -27,7 +27,7 @@ public class AirplaneBehaviour extends ContractNetResponder {
         propose.setPerformative(ACLMessage.PROPOSE);
 
         AirplaneProposal proposalArgs = new AirplaneProposal(agent.getTimeToLand(), agent.getSpaceRequiredToLand(),
-                calculateTimeLeftOfFuel(agent.getFuel(), agent.getFuelPerSecond()), calculateUrgency(agent.getTimeWaiting(), agent.getFlightType()), agent.isSos());
+                calculateTimeLeftOfFuel(agent.getFuel(), agent.getFuelPerSecond()), calculateUrgency(agent.getTimeWaiting(), agent.getFlightType()), agent.isSos(), agent.getName());
 
         try {
             propose.setContentObject(proposalArgs);
@@ -70,7 +70,6 @@ public class AirplaneBehaviour extends ContractNetResponder {
         } catch (UnreadableException e) {
             e.printStackTrace();
         }
-
         assert proposal != null;
         if (agent.getSpaceRequiredToLand() > proposal.getRunwayLength()) {
             throw new RefuseException("Plane too big for the runway");
@@ -101,6 +100,11 @@ public class AirplaneBehaviour extends ContractNetResponder {
 
         ACLMessage inform = accept.createReply();
         inform.setPerformative(ACLMessage.INFORM);
+        try {
+            inform.setContentObject(agent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return inform;
     }
 }

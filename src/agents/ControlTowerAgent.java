@@ -20,6 +20,14 @@ public class ControlTowerAgent extends Agent {
 
     private static Runway runway;
 
+    public static Runway getRunway() {
+        return runway;
+    }
+
+    public LaunchAgents getLaunchAgents() {
+        return launchAgents;
+    }
+
     @Override
     protected void setup() {
         Object[] args = this.getArguments();

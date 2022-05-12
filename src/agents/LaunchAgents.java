@@ -1,6 +1,8 @@
 package agents;
 
+import jade.core.AID;
 import jade.wrapper.AgentController;
+import jade.wrapper.StaleProxyException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,15 @@ public class LaunchAgents {
 
     public int getNAirplanes(){
         return this.n_airplanes;
+    }
+
+    public void removeFromAirplaneAgents(String agentName) throws StaleProxyException {
+        for (int i = 0; i < airplaneAgents.size(); i++) {
+            if (airplaneAgents.get(i).getName().equals(agentName)) {
+                airplaneAgents.remove(i);
+                break;
+            }
+        }
     }
 
 }
