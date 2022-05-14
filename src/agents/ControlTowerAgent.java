@@ -56,6 +56,8 @@ public class ControlTowerAgent extends Agent {
             e.printStackTrace();
         }
 
+        System.out.println(this.getName());
+
         addBehaviour(new ControlTowerBehaviour(this, message));
     }
 

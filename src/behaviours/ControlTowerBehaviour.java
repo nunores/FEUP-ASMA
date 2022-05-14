@@ -30,8 +30,6 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
 
     @Override
     protected void handleInform(ACLMessage inform) {
-
-
         ACLMessage message = new ACLMessage(ACLMessage.CFP);
         ArrayList<AgentController> airplaneAgents = controlTowerAgent.getLaunchAgents().getAirplaneAgents();
 
@@ -59,7 +57,6 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
 
     @Override
     protected void handleAllResponses(Vector responses, Vector acceptances) {
-        System.out.println("HandleAllResponses");
         System.out.println(responses.size());
         int bestValue = -1;
         ACLMessage bestReply = null;
@@ -84,6 +81,9 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
                     bestProposal = proposal;
                     bestReply = reply;
                 }
+            }
+            else {
+                return;
             }
         }
         if (bestReply != null) {

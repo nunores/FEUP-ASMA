@@ -7,11 +7,13 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class Main {
 
-    public static void main(String[] args) throws StaleProxyException {
+    public static void main(String[] args) throws StaleProxyException, InterruptedException {
 
         LaunchAgents launchAgents = LaunchAgents.getInstance();
 
@@ -21,29 +23,30 @@ public class Main {
         profile.setParameter(Profile.GUI, "true");
         ContainerController containerController = runtime.createMainContainer(profile);
 
-        AgentController airplaneAgentController;
+        AgentController controlTowerController;
 
         List<AgentController> airplaneAgents;
 
         airplaneAgents = launchAgents.getAirplaneAgents();
 
-        for(int i=1; i < launchAgents.getNAirplanes()+1; i++){
-            try {
-                airplaneAgents.add(containerController.createNewAgent("AirplaneAgent" + i , "agents.AirplaneAgent", launchAgents.createAirplaneArguments()));
-            } catch (StaleProxyException e) {
-                e.printStackTrace();
-            }
+
+        for(int i = 0; i < 20; i++){
+            /*Random r = new Random();
+            int low = 5;
+            int high = 11;
+            int result = r.nextInt(high-low) + low;*/
+
+            AgentController agentController = containerController.createNewAgent("AirplaneAgent" + i , "agents.AirplaneAgent", launchAgents.createAirplaneArguments());
+            airplaneAgents.add(agentController);
+            agentController.start();
+            //TimeUnit.SECONDS.sleep(result);
         }
 
-        for(AgentController airplaneAgent : airplaneAgents){
-            try {
-                airplaneAgent.start();
-            } catch (StaleProxyException e) {
-                e.printStackTrace();
-            }
-        }
+        controlTowerController = containerController.createNewAgent("ControlTowerAgent", "agents.ControlTowerAgent", launchAgents.createControlTowerArguments());
+        launchAgents.setControlTowerController(controlTowerController);
+        controlTowerController.start();
 
-        containerController.createNewAgent("ControlTowerAgent", "agents.ControlTowerAgent", launchAgents.createControlTowerArguments()).start();
+
 
     }
 

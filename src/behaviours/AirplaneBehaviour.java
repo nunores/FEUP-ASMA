@@ -2,12 +2,15 @@ package behaviours;
 
 import agents.AirplaneAgent;
 import agents.ControlTowerAgent;
+import agents.LaunchAgents;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetResponder;
+import jade.wrapper.StaleProxyException;
 import proposals.AirplaneProposal;
 import proposals.ControlTowerProposal;
 
@@ -16,10 +19,20 @@ import java.io.IOException;
 public class AirplaneBehaviour extends ContractNetResponder {
 
     private final AirplaneAgent agent;
+    private ControlTowerAgent controlTowerAgent;
 
-    public AirplaneBehaviour(Agent a, MessageTemplate mt) {
+    public AirplaneBehaviour(Agent a, MessageTemplate mt) throws StaleProxyException {
         super(a, mt);
         this.agent = (AirplaneAgent) a;
+        //sendHello();
+    }
+
+    private void sendHello() throws StaleProxyException {
+        ACLMessage hello = new ACLMessage(ACLMessage.INFORM);
+        //System.out.println(LaunchAgents.getInstance().getControlTowerController().getName());
+        hello.addReceiver(new AID("ControlTowerAgent@192.168.0.3:1099/JADE", AID.ISGUID));
+        hello.setContent("Hello");
+        this.agent.send(hello);
     }
 
     private ACLMessage createProposal(ACLMessage cfp) throws Exception {
@@ -63,7 +76,6 @@ public class AirplaneBehaviour extends ContractNetResponder {
 
     @Override
     protected ACLMessage handleCfp(ACLMessage cfp) throws RefuseException {
-        System.out.println("HandleCFPAirplane");
         ControlTowerProposal proposal = null;
         try {
             proposal = (ControlTowerProposal) cfp.getContentObject();
@@ -72,7 +84,9 @@ public class AirplaneBehaviour extends ContractNetResponder {
         }
         assert proposal != null;
         if (agent.getSpaceRequiredToLand() > proposal.getRunwayLength()) {
-            throw new RefuseException("Plane too big for the runway");
+            ACLMessage refuse = cfp.createReply();
+            refuse.setPerformative(ACLMessage.REFUSE);
+            throw new RefuseException(refuse);
         } else {
             try {
                 return createProposal(cfp);

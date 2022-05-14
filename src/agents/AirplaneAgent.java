@@ -5,6 +5,9 @@ import jade.core.Agent;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.wrapper.StaleProxyException;
+
+import java.util.concurrent.TimeUnit;
 
 public class AirplaneAgent extends Agent {
     public enum FlightType { lowCost, vip, businessClass, _private }
@@ -17,11 +20,15 @@ public class AirplaneAgent extends Agent {
     private FlightType flightType;
     private boolean sos;
 
+    private long startTime;
+
     private ControlTowerAgent controlTower;
 
     @Override
     public void setup()
     {
+        startTime = System.currentTimeMillis();
+
         Object[] args = this.getArguments();
         timeToLand = (int) args[0];
         spaceRequiredToLand = (int) args[1];
@@ -31,12 +38,17 @@ public class AirplaneAgent extends Agent {
         flightType = (FlightType) args[5];
         sos = (boolean) args[6];
 
+
         MessageTemplate message = MessageTemplate.and(
                 MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
                 MessageTemplate.MatchPerformative(ACLMessage.CFP)
         );
 
-        addBehaviour(new AirplaneBehaviour(this, message));
+        try {
+            addBehaviour(new AirplaneBehaviour(this, message));
+        } catch (StaleProxyException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -52,6 +64,8 @@ public class AirplaneAgent extends Agent {
 
     public int getFuel() { return fuel; }
 
-    public int getTimeWaiting() { return timeWaiting; }
+    public int getTimeWaiting() {
+        long endTime = System.currentTimeMillis();
+        return (int) TimeUnit.MILLISECONDS.toSeconds( endTime - startTime); }
 }
 

@@ -6,8 +6,12 @@ import jade.wrapper.StaleProxyException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static agents.AirplaneAgent.FlightType.lowCost;
+import static agents.AirplaneAgent.FlightType._private;
+import static agents.AirplaneAgent.FlightType.businessClass;
+import static agents.AirplaneAgent.FlightType.vip;
 
 public class LaunchAgents {
 
@@ -15,6 +19,16 @@ public class LaunchAgents {
     private final ArrayList<AgentController> airplaneAgents = new ArrayList<>();
 
     private static LaunchAgents instance = null;
+
+    private AgentController controlTowerController;
+
+    public AgentController getControlTowerController() {
+        return controlTowerController;
+    }
+
+    public void setControlTowerController(AgentController controlTowerController) {
+        this.controlTowerController = controlTowerController;
+    }
 
     private LaunchAgents() {
         this.n_airplanes = 3;
@@ -32,15 +46,31 @@ public class LaunchAgents {
     public Object[] createAirplaneArguments(){
 		List<Object> args = new ArrayList<>();
 
-        args.add(10); // timeToLand
-        args.add(6); // spaceRequiredToLand
+        args.add(generateRandomBetween(6, 12)); // timeToLand
+        args.add(generateRandomBetween(1, 8)); // spaceRequiredToLand
         args.add(50); // timeLeftOfFuel
         args.add(0); // timeWaiting
         args.add(0.3); // fuelPerSecond
-        args.add(lowCost); // flightType
-        args.add(false); // sos
+        args.add(getRandom(new AirplaneAgent.FlightType[]{lowCost, lowCost, lowCost, lowCost, lowCost, _private, _private, businessClass, businessClass, businessClass, vip})); // flightType
+        if (generateRandomBetween(1, 20) == 1) {
+            args.add(true); // sos
+        }
+        else {
+            args.add(false); // sos
+        }
 
         return args.toArray();
+    }
+
+    private int generateRandomBetween(int low, int high){
+
+        Random r = new Random();
+        return r.nextInt(high-low) + low;
+    }
+
+    private AirplaneAgent.FlightType getRandom(AirplaneAgent.FlightType[] array) {
+        int rnd = new Random().nextInt(array.length);
+        return array[rnd];
     }
 
     public Object[] createControlTowerArguments() {
