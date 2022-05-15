@@ -12,6 +12,7 @@ import jade.proto.ContractNetResponder;
 import jade.wrapper.StaleProxyException;
 import proposals.AirplaneProposal;
 import proposals.ControlTowerProposal;
+import utils.Logger;
 import utils.Printer;
 
 import java.io.IOException;
@@ -90,11 +91,21 @@ public class AirplaneBehaviour extends ContractNetResponder {
     @Override
     protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) {
         ControlTowerAgent.landPlane(agent.getSpaceRequiredToLand());
+        try {
+            Logger.getInstance().writeToLog(agent.getName() + " is landing (Space to land: " + agent.getSpaceRequiredToLand() + " Time to land: " + agent.getTimeToLand() + " SOS: " + agent.isSos() + ")");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Printer.getInstance().printData();
         new java.util.Timer().schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
+                        try {
+                            Logger.getInstance().writeToLog((agent.getName() + " has finished landing (Space freed: " + agent.getSpaceRequiredToLand() + ")"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         ControlTowerAgent.parkPlane(agent.getSpaceRequiredToLand());
                     }
                 },

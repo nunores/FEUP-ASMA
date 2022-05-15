@@ -12,6 +12,8 @@ import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import proposals.AirplaneProposal;
 import proposals.ControlTowerProposal;
+import utils.Logger;
+import utils.Runway;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -95,10 +97,14 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
         if (bestReply != null) {
             bestReply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
         }
-
+        try {
+            Logger.getInstance().writeToLog(bestProposal.getName() + " will land next (Space to land: " + bestProposal.getSpaceRequiredToLand() + " SOS: " + bestProposal.isSos() + ")");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while (!controlTowerAgent.enoughSpace(bestProposal.getSpaceRequiredToLand())) {
             try {
-                Thread.sleep(500);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
