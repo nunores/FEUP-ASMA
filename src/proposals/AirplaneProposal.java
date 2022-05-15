@@ -1,5 +1,7 @@
 package proposals;
 
+import agents.AirplaneAgent;
+
 import java.io.Serializable;
 
 public class AirplaneProposal implements Serializable{
@@ -10,6 +12,8 @@ public class AirplaneProposal implements Serializable{
     private final int urgency;
     private final boolean sos;
     private final String name;
+    private final int timeWaiting;
+    private final AirplaneAgent.FlightType flightType;
 
 
     public int getTimeToLand() {
@@ -18,10 +22,6 @@ public class AirplaneProposal implements Serializable{
 
     public int getSpaceRequiredToLand() {
         return spaceRequiredToLand;
-    }
-
-    public int getTimeLeftOfFuel() {
-        return timeLeftOfFuel;
     }
 
     public int getUrgency() {
@@ -36,12 +36,18 @@ public class AirplaneProposal implements Serializable{
         return name;
     }
 
-    public AirplaneProposal(int timeToLand, int spaceRequiredToLand, int timeLeftOfFuel, int urgency, boolean sos, String name) {
+    public int getTimeWaiting() { return timeWaiting; }
+
+    public AirplaneAgent.FlightType getFlightType() { return flightType; }
+
+    public AirplaneProposal(int timeToLand, int spaceRequiredToLand, int timeLeftOfFuel, int urgency, boolean sos, String name, int timeWaiting, AirplaneAgent.FlightType flightType) {
         this.timeToLand = timeToLand;
         this.spaceRequiredToLand = spaceRequiredToLand;
         this.timeLeftOfFuel = timeLeftOfFuel;
         this.urgency = urgency;
         this.sos = sos;
         this.name = name;
+        this.timeWaiting = timeWaiting;
+        this.flightType = flightType;
     }
 }

@@ -1,6 +1,5 @@
 package agents;
 
-import jade.core.AID;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
@@ -15,23 +14,14 @@ import static agents.AirplaneAgent.FlightType.vip;
 
 public class LaunchAgents {
 
-    private final int n_airplanes; // DEFAULT: 3
     private final ArrayList<AgentController> airplaneAgents = new ArrayList<>();
 
     private static LaunchAgents instance = null;
 
     private AgentController controlTowerController;
 
-    public AgentController getControlTowerController() {
-        return controlTowerController;
-    }
-
     public void setControlTowerController(AgentController controlTowerController) {
         this.controlTowerController = controlTowerController;
-    }
-
-    private LaunchAgents() {
-        this.n_airplanes = 3;
     }
     
     public static LaunchAgents getInstance()
@@ -49,7 +39,7 @@ public class LaunchAgents {
         args.add(generateRandomBetween(6, 12)); // timeToLand
         args.add(generateRandomBetween(1, 8)); // spaceRequiredToLand
         args.add(50); // timeLeftOfFuel
-        args.add(0); // timeWaiting
+        args.add(generateRandomBetween(0, 30)); // timeWaiting
         args.add(0.3); // fuelPerSecond
         args.add(getRandom(new AirplaneAgent.FlightType[]{lowCost, lowCost, lowCost, lowCost, lowCost, _private, _private, businessClass, businessClass, businessClass, vip})); // flightType
         if (generateRandomBetween(1, 20) == 1) {
@@ -83,10 +73,6 @@ public class LaunchAgents {
 
     public ArrayList<AgentController> getAirplaneAgents() {
         return this.airplaneAgents;
-    }
-
-    public int getNAirplanes(){
-        return this.n_airplanes;
     }
 
     public void removeFromAirplaneAgents(String agentName) throws StaleProxyException {

@@ -1,6 +1,5 @@
 package behaviours;
 
-import agents.AirplaneAgent;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.FIPANames;
@@ -17,6 +16,7 @@ import proposals.ControlTowerProposal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
 public class ControlTowerBehaviour extends ContractNetInitiator {
@@ -57,10 +57,11 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
 
     @Override
     protected void handleAllResponses(Vector responses, Vector acceptances) {
-        System.out.println(responses.size());
+        List<AirplaneProposal> currentAirplanes = new ArrayList<>();
         int bestValue = -1;
         ACLMessage bestReply = null;
         AirplaneProposal bestProposal = null;
+
         for (int i = 0; i < responses.size(); i++) {
             ACLMessage message = (ACLMessage) responses.get(i);
             if (message.getPerformative() == ACLMessage.PROPOSE) {
@@ -74,6 +75,7 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
                 } catch (UnreadableException e) {
                     e.printStackTrace();
                 }
+                currentAirplanes.add(proposal);
                 assert proposal != null;
                 int value = calculateValue(proposal);
                 if (value > bestValue) {
@@ -86,6 +88,10 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
                 return;
             }
         }
+
+        currentAirplanes.remove(bestProposal);
+        controlTowerAgent.setCurrentAirplanes(currentAirplanes);
+
         if (bestReply != null) {
             bestReply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
         }
@@ -103,6 +109,7 @@ public class ControlTowerBehaviour extends ContractNetInitiator {
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
+        
     }
 
     private int calculateValue(AirplaneProposal proposal) {

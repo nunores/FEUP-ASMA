@@ -22,7 +22,6 @@ public class AirplaneAgent extends Agent {
 
     private long startTime;
 
-    private ControlTowerAgent controlTower;
 
     @Override
     public void setup()
@@ -44,11 +43,7 @@ public class AirplaneAgent extends Agent {
                 MessageTemplate.MatchPerformative(ACLMessage.CFP)
         );
 
-        try {
-            addBehaviour(new AirplaneBehaviour(this, message));
-        } catch (StaleProxyException e) {
-            e.printStackTrace();
-        }
+        addBehaviour(new AirplaneBehaviour(this, message));
 
     }
 
@@ -66,6 +61,6 @@ public class AirplaneAgent extends Agent {
 
     public int getTimeWaiting() {
         long endTime = System.currentTimeMillis();
-        return (int) TimeUnit.MILLISECONDS.toSeconds( endTime - startTime); }
+        return (int) TimeUnit.MILLISECONDS.toSeconds( endTime - startTime) + timeWaiting; }
 }
 

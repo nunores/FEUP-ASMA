@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Runway {
-    private int length; // In meters
+    private int length; // In space units
     private int originalLength;
 
     public Runway(int length){

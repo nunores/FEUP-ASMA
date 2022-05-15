@@ -2,7 +2,6 @@ package behaviours;
 
 import agents.AirplaneAgent;
 import agents.ControlTowerAgent;
-import agents.LaunchAgents;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.RefuseException;
@@ -13,26 +12,17 @@ import jade.proto.ContractNetResponder;
 import jade.wrapper.StaleProxyException;
 import proposals.AirplaneProposal;
 import proposals.ControlTowerProposal;
+import utils.Printer;
 
 import java.io.IOException;
 
 public class AirplaneBehaviour extends ContractNetResponder {
 
     private final AirplaneAgent agent;
-    private ControlTowerAgent controlTowerAgent;
 
-    public AirplaneBehaviour(Agent a, MessageTemplate mt) throws StaleProxyException {
+    public AirplaneBehaviour(Agent a, MessageTemplate mt) {
         super(a, mt);
         this.agent = (AirplaneAgent) a;
-        //sendHello();
-    }
-
-    private void sendHello() throws StaleProxyException {
-        ACLMessage hello = new ACLMessage(ACLMessage.INFORM);
-        //System.out.println(LaunchAgents.getInstance().getControlTowerController().getName());
-        hello.addReceiver(new AID("ControlTowerAgent@192.168.0.3:1099/JADE", AID.ISGUID));
-        hello.setContent("Hello");
-        this.agent.send(hello);
     }
 
     private ACLMessage createProposal(ACLMessage cfp) throws Exception {
@@ -40,7 +30,7 @@ public class AirplaneBehaviour extends ContractNetResponder {
         propose.setPerformative(ACLMessage.PROPOSE);
 
         AirplaneProposal proposalArgs = new AirplaneProposal(agent.getTimeToLand(), agent.getSpaceRequiredToLand(),
-                calculateTimeLeftOfFuel(agent.getFuel(), agent.getFuelPerSecond()), calculateUrgency(agent.getTimeWaiting(), agent.getFlightType()), agent.isSos(), agent.getName());
+                calculateTimeLeftOfFuel(agent.getFuel(), agent.getFuelPerSecond()), calculateUrgency(agent.getTimeWaiting(), agent.getFlightType()), agent.isSos(), agent.getName(), agent.getTimeWaiting(), agent.getFlightType());
 
         try {
             propose.setContentObject(proposalArgs);
@@ -69,7 +59,7 @@ public class AirplaneBehaviour extends ContractNetResponder {
             default:
                 throw new Exception("No information about the flight type.");
         }
-        return importanceDegree*timeWaiting;
+        return importanceDegree*(timeWaiting+1);
     }
 
     private int calculateTimeLeftOfFuel(int fuel, double fuelPerSecond) { return (int) (fuel / fuelPerSecond); }
@@ -99,13 +89,12 @@ public class AirplaneBehaviour extends ContractNetResponder {
 
     @Override
     protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) {
-        System.out.println("Landed " + agent.getSpaceRequiredToLand());
         ControlTowerAgent.landPlane(agent.getSpaceRequiredToLand());
+        Printer.getInstance().printData();
         new java.util.Timer().schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
-                        System.out.println("Parking " + agent.getSpaceRequiredToLand());
                         ControlTowerAgent.parkPlane(agent.getSpaceRequiredToLand());
                     }
                 },

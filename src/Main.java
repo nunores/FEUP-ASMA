@@ -7,13 +7,11 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 
 public class Main {
 
-    public static void main(String[] args) throws StaleProxyException, InterruptedException {
+    public static void main(String[] args) throws StaleProxyException {
 
         LaunchAgents launchAgents = LaunchAgents.getInstance();
 
@@ -31,15 +29,9 @@ public class Main {
 
 
         for(int i = 0; i < 20; i++){
-            /*Random r = new Random();
-            int low = 5;
-            int high = 11;
-            int result = r.nextInt(high-low) + low;*/
-
             AgentController agentController = containerController.createNewAgent("AirplaneAgent" + i , "agents.AirplaneAgent", launchAgents.createAirplaneArguments());
             airplaneAgents.add(agentController);
             agentController.start();
-            //TimeUnit.SECONDS.sleep(result);
         }
 
         controlTowerController = containerController.createNewAgent("ControlTowerAgent", "agents.ControlTowerAgent", launchAgents.createControlTowerArguments());

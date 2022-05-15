@@ -7,18 +7,23 @@ import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
+import proposals.AirplaneProposal;
 import proposals.ControlTowerProposal;
+import utils.Printer;
 import utils.Runway;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ControlTowerAgent extends Agent {
 
     private final LaunchAgents launchAgents = LaunchAgents.getInstance();
 
     private static Runway runway;
+
+    private List<AirplaneProposal> currentAirplanes;
 
     public static Runway getRunway() {
         return runway;
@@ -28,8 +33,18 @@ public class ControlTowerAgent extends Agent {
         return launchAgents;
     }
 
+    public void setCurrentAirplanes(List<AirplaneProposal> currentAirplanes) {
+        this.currentAirplanes = currentAirplanes;
+    }
+
+    public List<AirplaneProposal> getCurrentAirplanes() {
+        return currentAirplanes;
+    }
+
     @Override
     protected void setup() {
+        
+        Printer.getInstance().setAgent(this);
         Object[] args = this.getArguments();
 
         runway = new Runway((int) args[0]);
@@ -55,8 +70,6 @@ public class ControlTowerAgent extends Agent {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println(this.getName());
 
         addBehaviour(new ControlTowerBehaviour(this, message));
     }
