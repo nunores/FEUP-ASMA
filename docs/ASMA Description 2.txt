@@ -1,0 +1,11 @@
+Our agent-based model will involve animals that compete in a shared, grid-like environment with the purpose of simulating
+natural selection.
+This environment will contain randomly placed food that is eaten by those animals. 
+They use energy to travel, walking randomly through the grid and eating the food they find on their path.
+Based on the amount of food found, they may survive, die or reproduce.
+Upon reproduction, the animals mutate and propagate their traits like speed and size.
+
+The simulation would enable the observation of the population and the dominance of each trait. 
+
+The tool we're gonna be using for development is Mesa.
+
