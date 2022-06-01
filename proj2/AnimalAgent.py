@@ -10,6 +10,7 @@ class AnimalAgent(Agent):
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
         self.energy = 10
+        self.previousPos = (-1, -1)
         
     def step(self):
         self.move()
@@ -21,11 +22,11 @@ class AnimalAgent(Agent):
         print("I'm " + str(self.unique_id) + " and I'm in " + str(self.pos))
         
     def move(self):
-        possible_steps = self.model.grid.get_neighborhood(
-            self.pos,
-            moore=False,
-            include_center=False)
+        possible_steps = self.getSurroundings()
+        if(self.previousPos in possible_steps):
+            possible_steps.remove(self.previousPos)
         new_position = self.random.choice(possible_steps)
+        self.previousPos = self.pos
         self.model.grid.move_agent(self, new_position)
         
     def canEat(self):
@@ -35,6 +36,18 @@ class AnimalAgent(Agent):
                 agent.eaten = True
                 return True
         return False
+    
+    def getSurroundings(self):
+        possibleSteps = []
+        if (not self.pos[0] - 1 < 0):
+            possibleSteps.append((self.pos[0] - 1, self.pos[1]))
+        if (not self.pos[0] + 1 > self.model.width - 1):
+            possibleSteps.append((self.pos[0] + 1, self.pos[1]))
+        if (not self.pos[1] - 1 < 0):
+            possibleSteps.append((self.pos[0], self.pos[1] - 1))
+        if (not self.pos[1] + 1 > self.model.height - 1):
+            possibleSteps.append((self.pos[0], self.pos[1] + 1))
+        return possibleSteps
         
         
         

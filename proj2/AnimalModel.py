@@ -11,6 +11,8 @@ class AnimalModel(Model):
     
     def __init__(self, numAnimals, numFood, width, height):
         self.running = True
+        self.width = width
+        self.height = height
         self.num_animals = numAnimals
         self.num_food = numFood
         self.schedule = RandomActivation(self)
@@ -43,8 +45,9 @@ class AnimalModel(Model):
             
             self.grid.place_agent(f, (x, y))
             
-        self.datacollector = DataCollector(agent_reporters={"agent_energy": "energy"})
+        self.datacollector = DataCollector(model_reporters={"Num": "num_animals"}, agent_reporters={"agent_energy": "energy"})
             
     def step(self):
         self.datacollector.collect(self)
+        print(self.schedule.agents)
         self.schedule.step()
