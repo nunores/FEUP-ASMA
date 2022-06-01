@@ -11,19 +11,21 @@ class AnimalAgent(Agent):
         super().__init__(unique_id, model)
         self.energy = 10
         self.previousPos = (-1, -1)
+        self.amountEaten = 0
         
     def step(self):
         self.move()
-        if(self.canEat()):
-            print("Welelelelele")
+        if (self.canEat()):
+            self.amountEaten += 1
             
         self.energy -= 1
         
-        print("I'm " + str(self.unique_id) + " and I'm in " + str(self.pos))
+        if (self.energy < 0 or self.amountEaten == 2):
+            self.nextGeneration()
         
     def move(self):
         possible_steps = self.getSurroundings()
-        if(self.previousPos in possible_steps):
+        if (self.previousPos in possible_steps):
             possible_steps.remove(self.previousPos)
         new_position = self.random.choice(possible_steps)
         self.previousPos = self.pos
@@ -32,8 +34,9 @@ class AnimalAgent(Agent):
     def canEat(self):
         cellmates = self.model.grid.get_cell_list_contents([self.pos])
         for agent in cellmates:
-            if(isinstance(agent, FoodAgent)):
-                agent.eaten = True
+            if (isinstance(agent, FoodAgent)):
+                self.model.grid.remove_agent(agent)
+                self.model.foodAgents.remove(agent)
                 return True
         return False
     
@@ -48,7 +51,13 @@ class AnimalAgent(Agent):
         if (not self.pos[1] + 1 > self.model.height - 1):
             possibleSteps.append((self.pos[0], self.pos[1] + 1))
         return possibleSteps
-        
-        
-        
+    
+    def nextGeneration(self):
+        if (self.amountEaten == 1):
+            self.model.addSurvival()
+        elif (self.amountEaten == 2):
+            self.model.addSurvival()
+            self.model.addReproducer()
+        self.model.grid.remove_agent(self)
+        self.model.schedule.remove(self)
         

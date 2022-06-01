@@ -32,7 +32,7 @@ chart = ChartModule([{"Label": "Num",
 server = ModularServer(AnimalModel,
                        [grid, chart],
                        "Animal Model",
-                       {"numAnimals":30, "numFood":15, "width":30, "height":30})
+                       {"numAnimals":30, "numFood":784, "width":30, "height":30})
 server.port = 8521 # The default
 server.launch()
 
