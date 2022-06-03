@@ -7,18 +7,19 @@ from FoodAgent import FoodAgent
 
 class AnimalAgent(Agent):
     
-    def __init__(self, unique_id, model):
+    def __init__(self, unique_id, model, size):
         super().__init__(unique_id, model)
-        self.energy = 10
+        self.energy = 30
         self.previousPos = (-1, -1)
         self.amountEaten = 0
+        self.size = size
         
     def step(self):
         self.move()
         if (self.canEat()):
             self.amountEaten += 1
             
-        self.energy -= 1
+        self.energy -= 1 * self.size
         
         if (self.energy < 0 or self.amountEaten == 2):
             self.nextGeneration()
@@ -38,6 +39,10 @@ class AnimalAgent(Agent):
                 self.model.grid.remove_agent(agent)
                 self.model.foodAgents.remove(agent)
                 return True
+            elif (isinstance(agent, AnimalAgent) and self.size > agent.size):
+                self.model.grid.remove_agent(agent)
+                self.model.schedule.remove(agent)
+                return True
         return False
     
     def getSurroundings(self):
@@ -54,10 +59,10 @@ class AnimalAgent(Agent):
     
     def nextGeneration(self):
         if (self.amountEaten == 1):
-            self.model.addSurvival()
+            self.model.addSurvival([self.size])
         elif (self.amountEaten == 2):
-            self.model.addSurvival()
-            self.model.addReproducer()
+            self.model.addSurvival([self.size])
+            self.model.addReproducer([self.size])
         self.model.grid.remove_agent(self)
         self.model.schedule.remove(self)
         

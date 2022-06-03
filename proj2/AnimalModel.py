@@ -22,7 +22,7 @@ class AnimalModel(Model):
         self.reproducers = []
         
         for i in range(self.num_animals):
-            a = AnimalAgent(i, self)
+            a = AnimalAgent(i, self, 1)
             self.schedule.add(a)
             if (bool(random.getrandbits(1))):
                 x = self.random.randrange(0, self.grid.width)
@@ -49,7 +49,7 @@ class AnimalModel(Model):
             self.grid.place_agent(f, (x, y))
             self.foodAgents.append(f)
             
-        self.datacollector = DataCollector(model_reporters={"Num": getActiveAnimals}, agent_reporters={"agent_energy": "energy"})
+        self.datacollector = DataCollector(model_reporters={"Num": getActiveAnimals, "Size": getMeanSize}, agent_reporters={"agent_energy": "energy"})
             
     def step(self):
         self.datacollector.collect(self)
@@ -58,11 +58,11 @@ class AnimalModel(Model):
             self.removeAllFood()
             self.startNextGeneration()
         
-    def addSurvival(self):
-        self.survivors.append([])
+    def addSurvival(self, parameterList):
+        self.survivors.append(parameterList)
         
-    def addReproducer(self):
-        self.reproducers.append([])
+    def addReproducer(self, parameterList):
+        self.reproducers.append(parameterList)
         
     def removeAllFood(self):
         for foodAgent in self.foodAgents:
@@ -71,7 +71,7 @@ class AnimalModel(Model):
         
     def startNextGeneration(self):
         for i in range(len(self.survivors)):
-            a = AnimalAgent(i, self)
+            a = AnimalAgent(i, self, self.survivors[i][0])
             self.schedule.add(a)
             if (bool(random.getrandbits(1))):
                 x = self.random.randrange(0, self.grid.width)
@@ -80,8 +80,10 @@ class AnimalModel(Model):
                 y = self.random.randrange(0, self.grid.height)
                 x = self.random.choice([0, self.grid.width - 1])
             self.grid.place_agent(a, (x, y))
+        index = 0
         for i in range(len(self.survivors), len(self.survivors) + len(self.reproducers)):
-            a = AnimalAgent(i, self)
+            newSize = round(random.uniform(self.reproducers[index][0] - 0.2, self.reproducers[index][0] + 0.2), 2)
+            a = AnimalAgent(i, self, newSize)
             self.schedule.add(a)
             if (bool(random.getrandbits(1))):
                 x = self.random.randrange(0, self.grid.width)
@@ -90,6 +92,7 @@ class AnimalModel(Model):
                 y = self.random.randrange(0, self.grid.height)
                 x = self.random.choice([0, self.grid.width - 1])
             self.grid.place_agent(a, (x, y))
+            index += 1
         for i in range(self.num_food):
             f = FoodAgent(i, self)
             while(True):   
@@ -123,3 +126,13 @@ class AnimalModel(Model):
 
 def getActiveAnimals(model):
     return len(model.schedule.agents) + len(model.survivors)
+
+def getMeanSize(model):
+    sum = 0
+    for agent in model.schedule.agents:
+        sum += agent.size
+    for agent in model.survivors:
+        sum += agent[0]
+    if ((len(model.schedule.agents) + len(model.survivors)) == 0):
+        return 0
+    return sum / (len(model.schedule.agents) + len(model.survivors))

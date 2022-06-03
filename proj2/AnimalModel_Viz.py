@@ -12,7 +12,7 @@ def agent_portrayal(agent):
                     "Color": "red",
                     "Filled": "true",
                     "Layer": 0,
-                    "r": 0.5}
+                    "r": agent.size/5}
     elif(isinstance(agent, FoodAgent)):
         if(agent.eaten == False):
             portrayal = {"Shape": "circle",
@@ -25,14 +25,18 @@ def agent_portrayal(agent):
 
 grid = CanvasGrid(agent_portrayal, 30, 30, 500, 500)
 
-chart = ChartModule([{"Label": "Num",
+chartNum = ChartModule([{"Label": "Num",
+                      "Color": "Black"}],
+                    data_collector_name='datacollector')
+
+chartSize = ChartModule([{"Label": "Size",
                       "Color": "Black"}],
                     data_collector_name='datacollector')
 
 server = ModularServer(AnimalModel,
-                       [grid, chart],
+                       [grid, chartNum, chartSize],
                        "Animal Model",
-                       {"numAnimals":30, "numFood":784, "width":30, "height":30})
+                       {"numAnimals":30, "numFood":100, "width":30, "height":30})
 server.port = 8521 # The default
 server.launch()
 
