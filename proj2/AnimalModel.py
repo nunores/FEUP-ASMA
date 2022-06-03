@@ -22,7 +22,12 @@ class AnimalModel(Model):
         self.reproducers = []
         
         for i in range(self.num_animals):
-            a = AnimalAgent(i, self, 1)
+            if (i == self.num_animals - 1):
+                a = AnimalAgent(i, self, 1, True, False)
+            elif (i == self.num_animals - 2):
+                a = AnimalAgent(i, self, 1, False, True)
+            else:
+                a = AnimalAgent(i, self, 1, False, False)
             self.schedule.add(a)
             if (bool(random.getrandbits(1))):
                 x = self.random.randrange(0, self.grid.width)
@@ -49,7 +54,7 @@ class AnimalModel(Model):
             self.grid.place_agent(f, (x, y))
             self.foodAgents.append(f)
             
-        self.datacollector = DataCollector(model_reporters={"Num": getActiveAnimals, "Size": getMeanSize}, agent_reporters={"agent_energy": "energy"})
+        self.datacollector = DataCollector(model_reporters={"Num": getActiveAnimals, "Size": getMeanSize, "Fast": getNumFast, "Not Fast": getNumNotFast, "Perceptible": getNumPerceptible, "Not Perceptible": getNumNotPerceptible}, agent_reporters={"agent_energy": "energy"})
             
     def step(self):
         self.datacollector.collect(self)
@@ -71,7 +76,7 @@ class AnimalModel(Model):
         
     def startNextGeneration(self):
         for i in range(len(self.survivors)):
-            a = AnimalAgent(i, self, self.survivors[i][0])
+            a = AnimalAgent(i, self, self.survivors[i][0], self.survivors[i][1], self.survivors[i][2])
             self.schedule.add(a)
             if (bool(random.getrandbits(1))):
                 x = self.random.randrange(0, self.grid.width)
@@ -83,7 +88,7 @@ class AnimalModel(Model):
         index = 0
         for i in range(len(self.survivors), len(self.survivors) + len(self.reproducers)):
             newSize = round(random.uniform(self.reproducers[index][0] - 0.2, self.reproducers[index][0] + 0.2), 2)
-            a = AnimalAgent(i, self, newSize)
+            a = AnimalAgent(i, self, newSize, self.reproducers[index][1], self.reproducers[index][2])
             self.schedule.add(a)
             if (bool(random.getrandbits(1))):
                 x = self.random.randrange(0, self.grid.width)
@@ -136,3 +141,43 @@ def getMeanSize(model):
     if ((len(model.schedule.agents) + len(model.survivors)) == 0):
         return 0
     return sum / (len(model.schedule.agents) + len(model.survivors))
+
+def getNumFast(model):
+    sum = 0
+    for agent in model.schedule.agents:
+        if (agent.fast):
+            sum += 1
+    for agent in model.survivors:
+        if (agent[1]):
+            sum += 1
+    return sum
+
+def getNumNotFast(model):
+    sum = 0
+    for agent in model.schedule.agents:
+        if (not agent.fast):
+            sum += 1
+    for agent in model.survivors:
+        if (not agent[1]):
+            sum += 1
+    return sum
+
+def getNumPerceptible(model):
+    sum = 0
+    for agent in model.schedule.agents:
+        if (agent.perceptible):
+            sum += 1
+    for agent in model.survivors:
+        if (agent[2]):
+            sum += 1
+    return sum
+
+def getNumNotPerceptible(model):
+    sum = 0
+    for agent in model.schedule.agents:
+        if (not agent.perceptible):
+            sum += 1
+    for agent in model.survivors:
+        if (not agent[2]):
+            sum += 1
+    return sum

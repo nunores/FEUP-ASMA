@@ -8,11 +8,20 @@ from mesa.visualization.modules import ChartModule
 def agent_portrayal(agent):
     portrayal = {}
     if(isinstance(agent, AnimalAgent)):  
-        portrayal = {"Shape": "circle",
-                    "Color": "red",
-                    "Filled": "true",
-                    "Layer": 0,
-                    "r": agent.size/5}
+        if (agent.fast):  
+            portrayal = {"Shape": "circle",
+                        "Color": "red",
+                        "Filled": "false",
+                        "Layer": 0,
+                        "r": agent.size/3}
+        else:
+            portrayal = {"Shape": "circle",
+                        "Color": "green",
+                        "Filled": "false",
+                        "Layer": 0,
+                        "r": agent.size/3}
+        if (agent.perceptible):
+            portrayal["Filled"] = True
     elif(isinstance(agent, FoodAgent)):
         if(agent.eaten == False):
             portrayal = {"Shape": "circle",
@@ -33,8 +42,18 @@ chartSize = ChartModule([{"Label": "Size",
                       "Color": "Black"}],
                     data_collector_name='datacollector')
 
+chartFast = ChartModule([{"Label": "Fast",
+                      "Color": "Red"}, {"Label": "Not Fast",
+                      "Color": "Green"}],
+                    data_collector_name='datacollector')
+
+chartPerceptible = ChartModule([{"Label": "Perceptible",
+                      "Color": "Red"}, {"Label": "Not Perceptible",
+                      "Color": "Green"}],
+                    data_collector_name='datacollector')
+
 server = ModularServer(AnimalModel,
-                       [grid, chartNum, chartSize],
+                       [grid, chartNum, chartSize, chartFast, chartPerceptible],
                        "Animal Model",
                        {"numAnimals":30, "numFood":100, "width":30, "height":30})
 server.port = 8521 # The default
