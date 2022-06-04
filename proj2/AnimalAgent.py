@@ -63,7 +63,7 @@ class AnimalAgent(Agent):
                 self.model.grid.remove_agent(agent)
                 self.model.foodAgents.remove(agent)
                 return True
-            elif (isinstance(agent, AnimalAgent) and self.size > agent.size):
+            elif (isinstance(agent, AnimalAgent) and (self.size > (agent.size * 1.2))):
                 self.model.grid.remove_agent(agent)
                 self.model.schedule.remove(agent)
                 return True

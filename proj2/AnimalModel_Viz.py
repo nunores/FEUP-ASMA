@@ -21,7 +21,9 @@ def agent_portrayal(agent):
                         "Layer": 0,
                         "r": agent.size/3}
         if (agent.perceptible):
-            portrayal["Filled"] = True
+            portrayal["Shape"] = "rect"
+            portrayal["w"] = (agent.size/3)
+            portrayal["h"] = (agent.size/3)
     elif(isinstance(agent, FoodAgent)):
         if(agent.eaten == False):
             portrayal = {"Shape": "circle",
