@@ -36,11 +36,11 @@ def agent_portrayal(agent):
 
 grid = CanvasGrid(agent_portrayal, 30, 30, 500, 500)
 
-chartNum = ChartModule([{"Label": "Num",
+chartNum = ChartModule([{"Label": "Number of Agents",
                       "Color": "Black"}],
                     data_collector_name='datacollector')
 
-chartSize = ChartModule([{"Label": "Size",
+chartSize = ChartModule([{"Label": "Mean Size",
                       "Color": "Black"}],
                     data_collector_name='datacollector')
 

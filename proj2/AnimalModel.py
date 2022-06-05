@@ -22,9 +22,9 @@ class AnimalModel(Model):
         self.reproducers = []
         
         for i in range(self.num_animals):
-            if (i == self.num_animals - 1):
+            if (i == self.num_animals - 1 or i == self.num_animals - 2 or i == self.num_animals - 3):
                 a = AnimalAgent(i, self, 1, True, False)
-            elif (i == self.num_animals - 2):
+            elif (i == self.num_animals - 4 or i == self.num_animals - 5 or i == self.num_animals - 6):
                 a = AnimalAgent(i, self, 1, False, True)
             else:
                 a = AnimalAgent(i, self, 1, False, False)
@@ -54,7 +54,7 @@ class AnimalModel(Model):
             self.grid.place_agent(f, (x, y))
             self.foodAgents.append(f)
             
-        self.datacollector = DataCollector(model_reporters={"Num": getActiveAnimals, "Size": getMeanSize, "Fast": getNumFast, "Not Fast": getNumNotFast, "Perceptible": getNumPerceptible, "Not Perceptible": getNumNotPerceptible}, agent_reporters={"agent_energy": "energy"})
+        self.datacollector = DataCollector(model_reporters={"Number of Agents": getActiveAnimals, "Mean Size": getMeanSize, "Fast": getNumFast, "Not Fast": getNumNotFast, "Perceptible": getNumPerceptible, "Not Perceptible": getNumNotPerceptible}, agent_reporters={"agent_energy": "energy"})
             
     def step(self):
         self.datacollector.collect(self)
@@ -115,19 +115,6 @@ class AnimalModel(Model):
             self.foodAgents.append(f)
         self.survivors = []
         self.reproducers = []
-        
-
-    def placeAgent(amount):
-        for i in range(len(amount)):
-            a = AnimalAgent(i, self)
-            self.schedule.add(a)
-            if (bool(random.getrandbits(1))):
-                x = self.random.randrange(0, self.grid.width)
-                y = self.random.choice([0, self.grid.height - 1])
-            else:
-                y = self.random.randrange(0, self.grid.height)
-                x = self.random.choice([0, self.grid.width - 1])
-            self.grid.place_agent(a, (x, y))
 
 def getActiveAnimals(model):
     return len(model.schedule.agents) + len(model.survivors)
