@@ -31,9 +31,9 @@ Animals compete in a shared, grid-like environment that contains randomly placed
 
 #### Label
 
-<span style="color:blue">Food</span>
-<span style="color:green">Slow animals</span>
-<span style="color:red">Fast animals</span>
+Food: blue
+Green: slow animals
+Red: Fast animals
 Circles: **don't** have perception
 Squares: have perception
 Size: size of circle/square
